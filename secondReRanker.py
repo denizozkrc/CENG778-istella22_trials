@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.neural_network import LinearRegression
+from sklearn.linear_model import LinearRegression
 
 class LinearRegressor:
     def __init__(self):
