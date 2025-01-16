@@ -2,7 +2,9 @@ import os
 import ir_datasets
 import pyterrier as pt
 from pyterrier.measures import P, nDCG, RR, AP
-#from monoT5.run_monot5 import run_monoT5
+from lambdamart.eval_custom import lambdaMart
+import pandas as pd
+
 
 
 def seeFormat(res=pt.io.read_results('monoT5/runs/initial.res.gz')):
@@ -15,7 +17,8 @@ def normaliseMonoScores(res):
     return normalized_scores
 
 
-#run_monoT5()  # run yourself
+# MonoT5 results
+
 monoT5_res_tut = pt.io.read_results('monoT5/runs/monot5.titleurltext.res.gz')
 monoT5_res_tu = pt.io.read_results('monoT5/runs/monot5.titleurl.res.gz')
 
@@ -25,5 +28,14 @@ pt.io.write_results(monoT5_res_tu, 'norm_runs/monot5.titleurl.normalized.res.gz'
 monoT5_res_tut['score'] = normaliseMonoScores(monoT5_res_tut)
 pt.io.write_results(monoT5_res_tut, 'norm_runs/monot5.titleurltext.normalized.res.gz')
 
-#seeFormat(monoT5_res_tu)
-#seeFormat(monoT5_res_tut)
+
+# LambdaMART results
+
+run, qrels, measures_df = lambdaMart()
+
+run_df = pd.DataFrame([{'qid': sd.query_id, 'docid': sd.doc_id, 'score': sd.score} for sd in run])
+run_df['score'] = normaliseMonoScores(run_df)
+pt.io.write_results(run_df, 'norm_runs/lambdamart.normalized.res.gz')
+
+qrels_df = pd.DataFrame([{'qid': q.query_id, 'docid': q.doc_id, 'rel': q.relevance} for q in qrels])
+pt.io.write_results(qrels_df, 'norm_runs/lambdamart.normalized.qrels.gz')
