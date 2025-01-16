@@ -2,7 +2,7 @@ import os
 import ir_datasets
 import pyterrier as pt
 from pyterrier.measures import P, nDCG, RR, AP
-from monoT5.run_monot5 import run_monoT5
+#from monoT5.run_monot5 import run_monoT5
 
 
 def seeFormat(res=pt.io.read_results('monoT5/runs/initial.res.gz')):
@@ -15,7 +15,7 @@ def normaliseMonoScores(res):
     return normalized_scores
 
 
-run_monoT5()
+#run_monoT5()  # run yourself
 monoT5_res_tut = pt.io.read_results('monoT5/runs/monot5.titleurltext.res.gz')
 monoT5_res_tu = pt.io.read_results('monoT5/runs/monot5.titleurl.res.gz')
 
