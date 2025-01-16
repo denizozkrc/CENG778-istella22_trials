@@ -52,10 +52,6 @@ pt.io.write_results(qrels_df, 'norm_runs/lambdamart.normalized.qrels.gz')
 
 
 # GridSearch for weights
-"""grouped_run = run_df.groupby('qid')
-grouped_mono = monoT5_res_tu_df.groupby('qid')
-grouped_qrels = qrels_df.groupby('qid')"""
-
 combined_df = run_df.merge(
     monoT5_res_tu_df[['qid', 'docid', 'score']], 
     on=['qid', 'docid'], 

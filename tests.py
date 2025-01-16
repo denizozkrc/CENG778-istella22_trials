@@ -116,18 +116,12 @@ ranked_results['rank'] = ranked_results.groupby('qid')['score'].rank(method='fir
 pt.io.write_results(ranked_results, 'norm_runs/neuralranker.ranked.res.gz')
 
 # Evaluate the ranked results
-eval_metrics = pt.pipelines.Experiment(
-    [
-        pt.pipelines.Evaluate(
-            metrics=[
-                P,
-                nDCG,
-                RR,
-                AP
-            ],
-            perquery=True
-        )
-    ]
+pt.Experiment(
+    [ranked_results],  # Use a PyTerrier pipeline or results DataFrame
+    [test_qrels_df],   # Ground-truth relevance judgments
+    measures=[P, nDCG, RR, AP],  # Specify evaluation measures
+    perquery=True
 )
 
-eval_metrics(ranked_results, test_qrels_df)
+# Evaluate the initial results
+
