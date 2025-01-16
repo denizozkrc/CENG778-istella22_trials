@@ -1,0 +1,5 @@
+pip install python-terrier==0.9.1
+pip install pandas==1.5.3
+pip install torch==2.0.1
+pip install transformers==4.31.0
+pip install ir_datasets==0.5.3

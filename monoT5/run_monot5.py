@@ -1,11 +1,13 @@
 import os
 import ir_datasets
 import pyterrier as pt
-pt.init()
-from pyterrier.measures import *
+from pyterrier.measures import P, nDCG, RR, AP
 from monot5 import MonoT5
+pt.init()
 
+#dataset = ir_datasets.load('istella22/test')
 dataset = pt.get_dataset('irds:istella22/test')
+#print(dir(dataset))
 
 if not os.path.exists('runs/monot5.titleurltext.res.gz'):
   pipeline = pt.text.get_text(dataset, ['title', 'url', 'text']) >> MonoT5('macavaney/it5-base-istella-title_url_text')
