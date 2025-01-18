@@ -24,6 +24,20 @@ monoT5_res_tu = pt.io.read_results('monoT5/runs/monot5.titleurl.res.gz')
 #monoT5_res_tu['score'] = normaliseMonoScores(monoT5_res_tu)
 monoT5_res_tu_df = pd.DataFrame(monoT5_res_tu)
 
+qid_to_remove = {'11904', '5184', '12774', '16467', '16118', '13241'}
+
+monoT5_res_tu_df = monoT5_res_tu_df[~monoT5_res_tu_df['qid'].isin(qid_to_remove)]
+
+monoT5_res_tu_df["qid"] = monoT5_res_tu_df["qid"].astype(int)
+monoT5_res_tu_df["score"] = monoT5_res_tu_df["score"].astype(float)
+monoT5_res_tu_df["rank"] = monoT5_res_tu_df["rank"].astype(int)
+
+monoT5_res_tu_df_ordered = monoT5_res_tu_df.sort_values(by=["qid", "docno"])
+monoT5_res_tu_df_ordered = monoT5_res_tu_df_ordered.reset_index(drop=True)
+
+print(monoT5_res_tu_df_ordered)
+
+
 """monoT5_res_tut['score'] = normaliseMonoScores(monoT5_res_tut)
 pt.io.write_results(monoT5_res_tut, 'norm_runs/monot5.titleurltext.normalized.res.gz')
 monoT5_res_tut_df = pd.DataFrame(monoT5_res_tut)"""
@@ -84,8 +98,6 @@ true_scores_test_df = pd.DataFrame({
     "score": true_scores_test   # True scores
 })
 
-# Evaluate
-
 # Evaluate the ranked results
 pt.Experiment(
     [y_pred_df],  
@@ -93,6 +105,5 @@ pt.Experiment(
     measures=[P, nDCG, RR, AP],
     perquery=True
 )
-
 
 # Evaluate the initial results
